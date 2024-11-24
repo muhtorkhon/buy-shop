@@ -1,0 +1,909 @@
+definitions:
+  controllers.Response:
+    properties:
+      data: {}
+    type: object
+  models.Brand:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      name_en:
+        type: string
+      name_ru:
+        type: string
+      name_uz:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.BrandRequest:
+    properties:
+      name_en:
+        type: string
+      name_ru:
+        type: string
+      name_uz:
+        type: string
+    type: object
+  models.Category:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      name_en:
+        type: string
+      name_ru:
+        type: string
+      name_uz:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.CategoryRequest:
+    properties:
+      name_en:
+        type: string
+      name_ru:
+        type: string
+      name_uz:
+        type: string
+    type: object
+  models.Image:
+    properties:
+      alt:
+        type: string
+      height:
+        type: integer
+      id:
+        type: integer
+      product:
+        $ref: '#/definitions/models.Product'
+      product_id:
+        type: integer
+      url:
+        type: string
+      width:
+        type: integer
+    type: object
+  models.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  models.Order:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      order_status:
+        type: string
+      product:
+        $ref: '#/definitions/models.Product'
+      product_id:
+        type: integer
+      quantity:
+        type: integer
+      total_amount:
+        type: number
+      user:
+        $ref: '#/definitions/models.Users'
+      user_id:
+        type: integer
+    type: object
+  models.Product:
+    properties:
+      brand:
+        $ref: '#/definitions/models.Brand'
+      brand_id:
+        type: integer
+      category:
+        $ref: '#/definitions/models.Category'
+      category_id:
+        type: integer
+      created_at:
+        type: string
+      description_en:
+        type: string
+      description_ru:
+        type: string
+      description_uz:
+        type: string
+      id:
+        type: integer
+      images:
+        items:
+          $ref: '#/definitions/models.Image'
+        type: array
+      name_en:
+        type: string
+      name_ru:
+        type: string
+      name_uz:
+        type: string
+      price:
+        type: number
+      stock:
+        type: integer
+      updated_at:
+        type: string
+    required:
+    - brand_id
+    - category_id
+    - price
+    type: object
+  models.ProductRequest:
+    properties:
+      brand_id:
+        type: integer
+      category_id:
+        type: integer
+      description_en:
+        type: string
+      description_ru:
+        type: string
+      description_uz:
+        type: string
+      images:
+        items:
+          $ref: '#/definitions/models.Image'
+        type: array
+      name_en:
+        type: string
+      name_ru:
+        type: string
+      name_uz:
+        type: string
+      price:
+        type: number
+    required:
+    - brand_id
+    - category_id
+    - price
+    type: object
+  models.Request:
+    properties:
+      code:
+        type: string
+      phone_number:
+        type: string
+    type: object
+  models.UserRegister:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      password:
+        minLength: 8
+        type: string
+      phone_number:
+        type: string
+      role:
+        enum:
+        - admin
+        - user
+        type: string
+    required:
+    - email
+    - first_name
+    - password
+    - phone_number
+    - role
+    type: object
+  models.Users:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      orders:
+        items:
+          $ref: '#/definitions/models.Order'
+        type: array
+      password:
+        type: string
+      phone_number:
+        type: string
+      role:
+        type: string
+    type: object
+  models.UsersResponse:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      password:
+        type: string
+      phone_number:
+        type: string
+      role:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Allows a user to log in using email and password. If valid, returns
+        a JWT token.
+      parameters:
+      - description: Login Credentials
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully restored the category
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: 'Unauthorized: Invalid credentials'
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: User not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Login a user
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Registers a new user by providing phone number, email, and password.
+      parameters:
+      - description: User Registration Data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserRegister'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created the user
+          schema:
+            $ref: '#/definitions/models.UsersResponse'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new user
+      tags:
+      - auth
+  /auth/verify:
+    post:
+      consumes:
+      - application/json
+      description: Verifies the user's phone number using the code sent earlier. If
+        valid, activates the user.
+      parameters:
+      - description: Phone number and code verification data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User verified and activated successfully
+          schema:
+            type: string
+        "400":
+          description: Invalid or expired code
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Verify phone number with the code
+      tags:
+      - auth
+  /brands:
+    get:
+      consumes:
+      - application/json
+      description: Get all brands from the store
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of all brands
+          schema:
+            $ref: '#/definitions/models.Brand'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      summary: Get all brands
+      tags:
+      - brands
+    post:
+      consumes:
+      - application/json
+      description: Create a new brand in the store
+      parameters:
+      - description: Brand to be created
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.BrandRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Brand created successfully
+          schema:
+            $ref: '#/definitions/models.BrandRequest'
+        "400":
+          description: Invalid request format
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      summary: Create a new brand
+      tags:
+      - brands
+  /brands/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a specific brand by its ID
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Brand deleted successfully
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "400":
+          description: Invalid brand ID
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      summary: Delete a brand by ID
+      tags:
+      - brands
+    get:
+      consumes:
+      - application/json
+      description: Get a specific brand by its ID
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Brand details
+          schema:
+            $ref: '#/definitions/models.Brand'
+        "400":
+          description: Invalid brand ID
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "404":
+          description: Brand not found
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      summary: Get a brand by ID
+      tags:
+      - brands
+    put:
+      consumes:
+      - application/json
+      description: Update an existing brand by its ID
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Brand to be updated
+        in: body
+        name: brand
+        required: true
+        schema:
+          $ref: '#/definitions/models.BrandRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Brand updated successfully
+          schema:
+            $ref: '#/definitions/models.BrandRequest'
+        "400":
+          description: Invalid brand ID or request format
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      summary: Update a brand by ID
+      tags:
+      - brands
+  /brands/restore/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Restore a previously soft deleted brand by its ID.
+      parameters:
+      - description: brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully restored the brand
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to restore brand
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Restore a soft deleted brand
+      tags:
+      - brands
+  /categories:
+    get:
+      consumes:
+      - application/json
+      description: Get all categories from the store
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Category'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      summary: Get all categories
+      tags:
+      - categories
+    post:
+      consumes:
+      - application/json
+      description: Create a new category in the store
+      parameters:
+      - description: Category to be created
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/models.CategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.CategoryRequest'
+        "400":
+          description: Invalid request format
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      summary: Create a new category
+      tags:
+      - categories
+  /categories/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a specific category by its ID
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category deleted successfully
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "400":
+          description: Invalid category ID
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      summary: Delete a category by ID
+      tags:
+      - categories
+    get:
+      consumes:
+      - application/json
+      description: Get a specific category by its ID
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Category'
+        "400":
+          description: Invalid category ID
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "404":
+          description: Category not found
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      summary: Get a category by ID
+      tags:
+      - categories
+    put:
+      consumes:
+      - application/json
+      description: Update an existing category by its ID
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Category to be updated
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/models.CategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CategoryRequest'
+        "400":
+          description: Invalid category ID or request format
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      summary: Update a category by ID
+      tags:
+      - categories
+  /categories/restore/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Restore a previously soft deleted category by its ID.
+      parameters:
+      - description: category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully restored the category
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "500":
+          description: Failed to restore category
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      summary: Restore a soft deleted category
+      tags:
+      - categories
+  /orders:
+    post:
+      consumes:
+      - application/json
+      description: Allows the authenticated user to create a new order by providing
+        product ID, quantity, and other details.
+      parameters:
+      - description: Order data
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/models.Order'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created the order
+          schema:
+            $ref: '#/definitions/models.Order'
+        "400":
+          description: Invalid input or product not available
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new order
+      tags:
+      - orders
+  /products:
+    get:
+      consumes:
+      - application/json
+      description: Get products filtered by category, brand, page, and page size
+      parameters:
+      - description: Brand ID
+        in: query
+        name: brand_id
+        type: integer
+      - description: Category ID
+        in: query
+        name: category_id
+        type: integer
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Number of items per page
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved products
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "400":
+          description: Invalid input parameters
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "404":
+          description: Products not found
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      summary: Get products by filters
+      tags:
+      - products
+    post:
+      consumes:
+      - application/json
+      description: Create a new product in the store
+      parameters:
+      - description: Product to be created
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/models.ProductRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created product
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "400":
+          description: Invalid request format
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "500":
+          description: Failed to create product
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      summary: Create a new product
+      tags:
+      - products
+  /products/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a specific product by its ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product deleted successfully
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "400":
+          description: Invalid product ID
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "500":
+          description: Failed to delete product
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      summary: Delete a product by ID
+      tags:
+      - products
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a product by its unique ID.
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved product
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "404":
+          description: Product not found
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      summary: Get product by ID
+      tags:
+      - products
+    put:
+      consumes:
+      - application/json
+      description: Update an existing product by its ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Product data to update
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/models.ProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully updated product
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "400":
+          description: Invalid product ID or request format
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "500":
+          description: Failed to update product
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      summary: Update a product by ID
+      tags:
+      - products
+  /products/restore/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Restore a previously soft deleted product by its ID.
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully restored the product
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to restore product
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Restore a soft deleted product
+      tags:
+      - products
+swagger: "2.0"

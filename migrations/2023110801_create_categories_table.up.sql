@@ -1,0 +1,8 @@
+CREATE TABLE categories (
+    id SERIAL PRIMARY KEY,
+    name_uz VARCHAR(255),
+    name_ru VARCHAR(255),
+    name_en VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

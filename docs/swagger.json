@@ -1,0 +1,1365 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "description": "Allows a user to log in using email and password. If valid, returns a JWT token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login a user",
+                "parameters": [
+                    {
+                        "description": "Login Credentials",
+                        "name": "login",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully restored the category",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized: Invalid credentials",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "description": "Registers a new user by providing phone number, email, and password.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Create a new user",
+                "parameters": [
+                    {
+                        "description": "User Registration Data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UserRegister"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully created the user",
+                        "schema": {
+                            "$ref": "#/definitions/models.UsersResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/verify": {
+            "post": {
+                "description": "Verifies the user's phone number using the code sent earlier. If valid, activates the user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Verify phone number with the code",
+                "parameters": [
+                    {
+                        "description": "Phone number and code verification data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Request"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User verified and activated successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid or expired code",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/brands": {
+            "get": {
+                "description": "Get all brands from the store",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "brands"
+                ],
+                "summary": "Get all brands",
+                "responses": {
+                    "200": {
+                        "description": "List of all brands",
+                        "schema": {
+                            "$ref": "#/definitions/models.Brand"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new brand in the store",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "brands"
+                ],
+                "summary": "Create a new brand",
+                "parameters": [
+                    {
+                        "description": "Brand to be created",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.BrandRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Brand created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/models.BrandRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request format",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/brands/restore/{id}": {
+            "put": {
+                "description": "Restore a previously soft deleted brand by its ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "brands"
+                ],
+                "summary": "Restore a soft deleted brand",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "brand ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully restored the brand",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to restore brand",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/brands/{id}": {
+            "get": {
+                "description": "Get a specific brand by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "brands"
+                ],
+                "summary": "Get a brand by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Brand ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Brand details",
+                        "schema": {
+                            "$ref": "#/definitions/models.Brand"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid brand ID",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Brand not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update an existing brand by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "brands"
+                ],
+                "summary": "Update a brand by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Brand ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Brand to be updated",
+                        "name": "brand",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.BrandRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Brand updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/models.BrandRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid brand ID or request format",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a specific brand by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "brands"
+                ],
+                "summary": "Delete a brand by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Brand ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Brand deleted successfully",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid brand ID",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/categories": {
+            "get": {
+                "description": "Get all categories from the store",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Get all categories",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Category"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new category in the store",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Create a new category",
+                "parameters": [
+                    {
+                        "description": "Category to be created",
+                        "name": "category",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.CategoryRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.CategoryRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request format",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/restore/{id}": {
+            "put": {
+                "description": "Restore a previously soft deleted category by its ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Restore a soft deleted category",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully restored the category",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to restore category",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/{id}": {
+            "get": {
+                "description": "Get a specific category by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Get a category by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Category"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid category ID",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update an existing category by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Update a category by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Category to be updated",
+                        "name": "category",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.CategoryRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.CategoryRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid category ID or request format",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a specific category by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Delete a category by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category deleted successfully",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid category ID",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders": {
+            "post": {
+                "description": "Allows the authenticated user to create a new order by providing product ID, quantity, and other details.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "orders"
+                ],
+                "summary": "Create a new order",
+                "parameters": [
+                    {
+                        "description": "Order data",
+                        "name": "order",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Order"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully created the order",
+                        "schema": {
+                            "$ref": "#/definitions/models.Order"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input or product not available",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/products": {
+            "get": {
+                "description": "Get products filtered by category, brand, page, and page size",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Get products by filters",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Brand ID",
+                        "name": "brand_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Category ID",
+                        "name": "category_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of items per page",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved products",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input parameters",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Products not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new product in the store",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Create a new product",
+                "parameters": [
+                    {
+                        "description": "Product to be created",
+                        "name": "product",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ProductRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully created product",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request format",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to create product",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/products/restore/{id}": {
+            "put": {
+                "description": "Restore a previously soft deleted product by its ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Restore a soft deleted product",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully restored the product",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to restore product",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}": {
+            "get": {
+                "description": "Retrieves a product by its unique ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Get product by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved product",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update an existing product by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Update a product by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Product data to update",
+                        "name": "product",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ProductRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated product",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid product ID or request format",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to update product",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a specific product by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Delete a product by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product deleted successfully",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid product ID",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to delete product",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "controllers.Response": {
+            "type": "object",
+            "properties": {
+                "data": {}
+            }
+        },
+        "models.Brand": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name_en": {
+                    "type": "string"
+                },
+                "name_ru": {
+                    "type": "string"
+                },
+                "name_uz": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.BrandRequest": {
+            "type": "object",
+            "properties": {
+                "name_en": {
+                    "type": "string"
+                },
+                "name_ru": {
+                    "type": "string"
+                },
+                "name_uz": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Category": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name_en": {
+                    "type": "string"
+                },
+                "name_ru": {
+                    "type": "string"
+                },
+                "name_uz": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.CategoryRequest": {
+            "type": "object",
+            "properties": {
+                "name_en": {
+                    "type": "string"
+                },
+                "name_ru": {
+                    "type": "string"
+                },
+                "name_uz": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Image": {
+            "type": "object",
+            "properties": {
+                "alt": {
+                    "type": "string"
+                },
+                "height": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "product": {
+                    "$ref": "#/definitions/models.Product"
+                },
+                "product_id": {
+                    "type": "integer"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "width": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.LoginRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Order": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "order_status": {
+                    "type": "string"
+                },
+                "product": {
+                    "$ref": "#/definitions/models.Product"
+                },
+                "product_id": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "total_amount": {
+                    "type": "number"
+                },
+                "user": {
+                    "$ref": "#/definitions/models.Users"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Product": {
+            "type": "object",
+            "required": [
+                "brand_id",
+                "category_id",
+                "price"
+            ],
+            "properties": {
+                "brand": {
+                    "$ref": "#/definitions/models.Brand"
+                },
+                "brand_id": {
+                    "type": "integer"
+                },
+                "category": {
+                    "$ref": "#/definitions/models.Category"
+                },
+                "category_id": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description_en": {
+                    "type": "string"
+                },
+                "description_ru": {
+                    "type": "string"
+                },
+                "description_uz": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Image"
+                    }
+                },
+                "name_en": {
+                    "type": "string"
+                },
+                "name_ru": {
+                    "type": "string"
+                },
+                "name_uz": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "stock": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ProductRequest": {
+            "type": "object",
+            "required": [
+                "brand_id",
+                "category_id",
+                "price"
+            ],
+            "properties": {
+                "brand_id": {
+                    "type": "integer"
+                },
+                "category_id": {
+                    "type": "integer"
+                },
+                "description_en": {
+                    "type": "string"
+                },
+                "description_ru": {
+                    "type": "string"
+                },
+                "description_uz": {
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Image"
+                    }
+                },
+                "name_en": {
+                    "type": "string"
+                },
+                "name_ru": {
+                    "type": "string"
+                },
+                "name_uz": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                }
+            }
+        },
+        "models.Request": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UserRegister": {
+            "type": "object",
+            "required": [
+                "email",
+                "first_name",
+                "password",
+                "phone_number",
+                "role"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string",
+                    "enum": [
+                        "admin",
+                        "user"
+                    ]
+                }
+            }
+        },
+        "models.Users": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "orders": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Order"
+                    }
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UsersResponse": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
