@@ -68,7 +68,7 @@ func main() {
 		Auth: &authController,
 	})
 
-	router.GET("/ai-shop/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("/buy-shop/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	if err := router.Run(":8080"); err != nil {
 		log.Fatalf("Failed to run on port: 8080 -> %v", err)
