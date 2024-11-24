@@ -36,6 +36,7 @@ func SetupRouter(ctrl *controllers.Controller) *gin.Engine {
 	router.PUT("/brands/restore/:id", ctrl.Brand.RestoreBrand)
 
 	// Foydalanuvchi ro'yxatdan o'tish va login qilish endpointlari
+	router.POST("/auth/verify", ctrl.Auth.VerifyCode)
 	router.POST("/auth/register", ctrl.Auth.CreateUser)                   // Foydalanuvchi ro'yxatdan o'tish
 	router.POST("/auth/login", ctrl.Auth.LoginUser)                       // Foydalanuvchi login qilish
 
