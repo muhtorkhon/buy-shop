@@ -23,6 +23,7 @@ func NewCategoryController(storage *storage.CategoryStore) (*CategoryController,
 // @Tags 			categories
 // @Accept 			json
 // @Produce 		json
+// @Security ApiKeyAuth
 // @Param 			category body models.CategoryRequest true "Category to be created"
 // @Success 		201 {object} models.CategoryRequest
 // @Failure 		400 {object} Response "Invalid request format"

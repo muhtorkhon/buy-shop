@@ -11,12 +11,11 @@ import (
 
 func AutoMiddleware(role string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-	
+
 		tokenString := c.GetHeader("Authorization")
 		if tokenString == "" {
 			log.Println("[ERROR] Authorization header missing")
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header missing"})
-			c.Abort()
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization header missing"})
 			return
 		}
 

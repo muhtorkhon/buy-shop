@@ -16,17 +16,15 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-
-
 type AuthController struct {
 	Storage *storage.UserStorage
-	Redis *rediss.RedisDb
+	Redis   *rediss.RedisDb
 }
 
 func NewAuthController(storage *storage.UserStorage, redis *rediss.RedisDb) (*AuthController, error) {
 	return &AuthController{
 		Storage: storage,
-		Redis: redis,
+		Redis:   redis,
 	}, nil
 }
 
@@ -36,13 +34,15 @@ func init() {
 	validateObj = validator.New()
 	validation.RegisterCustomValidators(validateObj)
 	fmt.Println("-----------============")
-	
+
 }
 
 // CreateUser godoc
 // @Summary      Create a new user
-// @Description  Registers a new user by providing phone number, email, and password. 
-//               Validates phone number, email, and password, then generates a verification code for phone number validation.
+// @Description  Registers a new user by providing phone number, email, and password.
+//
+//	Validates phone number, email, and password, then generates a verification code for phone number validation.
+//
 // @Tags         auth
 // @Accept       json
 // @Produce      json
@@ -66,7 +66,7 @@ func (ac *AuthController) CreateUser(c *gin.Context) {
 		log.Println("Validatsiya error", err)
 		return
 	}
-
+	
 	hashedPassword, err := password.HashPassword(user.Password)
 	if err != nil {
 		HandleResponse(c, http.StatusInternalServerError, "Password hashing failed: "+err.Error())
@@ -83,11 +83,11 @@ func (ac *AuthController) CreateUser(c *gin.Context) {
 	}
 
 	info := models.Users{
-		FirstName: user.FirstName,
-		Email: user.Email,
+		FirstName:   user.FirstName,
+		Email:       user.Email,
 		PhoneNumber: user.PhoneNumber,
-		Password: hashedPassword,
-		Role: user.Role,
+		Password:    hashedPassword,
+		Role:        user.Role,
 	}
 
 	if err := ac.Storage.Create(&info); err != nil {
@@ -174,16 +174,16 @@ func (ac *AuthController) LoginUser(c *gin.Context) {
 		log.Printf("Login failed: Incorrect password for user with email: %s", user.Email)
 		return
 	}
- 
+
 	token, err := utils.GenerateToken(user.Email, user.Role)
 	if err != nil {
-    	HandleResponse(c, http.StatusInternalServerError, "Failed to generate token")
-    	log.Println("Token generation failed", err)
-    	return
+		HandleResponse(c, http.StatusInternalServerError, "Failed to generate token")
+		log.Println("Token generation failed", err)
+		return
 	}
 
 	HandleResponse(c, http.StatusOK, gin.H{
 		"token": token,
 	})
-	
+
 }

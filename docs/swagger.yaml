@@ -238,7 +238,17 @@ definitions:
         type: string
     type: object
 info:
-  contact: {}
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
 paths:
   /auth/login:
     post:
@@ -562,6 +572,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/controllers.Response'
+      security:
+      - ApiKeyAuth: []
       summary: Create a new category
       tags:
       - categories
@@ -720,45 +732,6 @@ paths:
       tags:
       - orders
   /products:
-    get:
-      consumes:
-      - application/json
-      description: Get products filtered by category, brand, page, and page size
-      parameters:
-      - description: Brand ID
-        in: query
-        name: brand_id
-        type: integer
-      - description: Category ID
-        in: query
-        name: category_id
-        type: integer
-      - description: Page number
-        in: query
-        name: page
-        type: integer
-      - description: Number of items per page
-        in: query
-        name: page_size
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Successfully retrieved products
-          schema:
-            $ref: '#/definitions/controllers.Response'
-        "400":
-          description: Invalid input parameters
-          schema:
-            $ref: '#/definitions/controllers.Response'
-        "404":
-          description: Products not found
-          schema:
-            $ref: '#/definitions/controllers.Response'
-      summary: Get products by filters
-      tags:
-      - products
     post:
       consumes:
       - application/json
@@ -785,6 +758,8 @@ paths:
           description: Failed to create product
           schema:
             $ref: '#/definitions/controllers.Response'
+      security:
+      - BearerAuth: []
       summary: Create a new product
       tags:
       - products
@@ -814,6 +789,8 @@ paths:
           description: Failed to delete product
           schema:
             $ref: '#/definitions/controllers.Response'
+      security:
+      - BearerAuth: []
       summary: Delete a product by ID
       tags:
       - products
@@ -876,6 +853,8 @@ paths:
           description: Failed to update product
           schema:
             $ref: '#/definitions/controllers.Response'
+      security:
+      - BearerAuth: []
       summary: Update a product by ID
       tags:
       - products
@@ -903,7 +882,57 @@ paths:
           schema:
             additionalProperties: true
             type: object
+      security:
+      - BearerAuth: []
       summary: Restore a soft deleted product
       tags:
       - products
+  /user/products:
+    get:
+      consumes:
+      - application/json
+      description: Get products filtered by category, brand, page, and page size
+      parameters:
+      - description: Brand ID
+        in: query
+        name: brand_id
+        type: integer
+      - description: Category ID
+        in: query
+        name: category_id
+        type: integer
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Number of items per page
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved products
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "400":
+          description: Invalid input parameters
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "404":
+          description: Products not found
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      summary: Get products by filters
+      tags:
+      - products
+securityDefinitions:
+  BasicAuth:
+    type: basic
+  BearerAuth:
+    description: Bearer token
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

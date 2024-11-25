@@ -24,6 +24,7 @@ func NewProductController(storage *storage.ProductStore) (*ProductController, er
 // @Tags 			products
 // @Accept  		json
 // @Produce  		json
+// @securityKey     bir 
 // @Param 			brand_id query int false "Brand ID"
 // @Param 			category_id query int false "Category ID"
 // @Param 			page query int false "Page number"
@@ -31,7 +32,7 @@ func NewProductController(storage *storage.ProductStore) (*ProductController, er
 // @Success 		200 {object} Response "Successfully retrieved products"
 // @Failure 		400 {object} Response "Invalid input parameters"
 // @Failure 		404 {object} Response "Products not found"
-// @Router 			/products [get]
+// @Router 			/user/products [get]
 func (s *ProductController) GetProductsByFilters(c *gin.Context) {
 	var filtr models.ProductFilter
 
@@ -88,6 +89,7 @@ func (s *ProductController) GetByID(c *gin.Context) {
 // @Summary 		Create a new product
 // @Description 	Create a new product in the store
 // @Tags 			products
+// @Security 	 	BearerAuth
 // @Accept 			json
 // @Produce 		json
 // @Param 			product body models.ProductRequest true "Product to be created"
@@ -129,6 +131,7 @@ func (s *ProductController) CreateProduct(c *gin.Context) {
 // @Summary 		Update a product by ID
 // @Description 	Update an existing product by its ID
 // @Tags 			products
+// @Security 	 BearerAuth
 // @Accept 			json
 // @Produce 		json
 // @Param 			id path int true "Product ID"
@@ -160,6 +163,7 @@ func (s *ProductController) UpdateProduct(c *gin.Context) {
 // @Summary 		Delete a product by ID
 // @Description 	Delete a specific product by its ID
 // @Tags 			products
+// @Security 	 BearerAuth
 // @Accept 			json
 // @Produce 		json
 // @Param   		id path int true "Product ID"
@@ -184,6 +188,7 @@ func (s *ProductController) DeleteProduct(c *gin.Context) {
 // @Summary           Restore a soft deleted product
 // @Description       Restore a previously soft deleted product by its ID.
 // @Tags              products
+// @Security 	 	  BearerAuth
 // @Accept            json
 // @Produce           json
 // @Param             id path string true "Product ID" // ID of the product to restore
