@@ -25,14 +25,6 @@ type UsersResponse struct {
 	IsActive    bool   `json:"is_active"`
 }
 
-// type UserRegister struct {
-// 	FirstName   string `json:"first_name" binding:"required"`                    
-// 	Email       string `json:"email" binding:"required" validate:"email"`        
-// 	PhoneNumber string `json:"phone_number" binding:"required" validate:"phone"` 
-// 	Password    string `json:"password" validate:"password"`  
-// 	Role        string `json:"role" binding:"required,oneof=admin user"`        
-// }
-
 type UserRegister struct {
 	FirstName   string `json:"first_name" binding:"required"`                         
 	Email       string `json:"email" binding:"required,email"`                      

@@ -99,6 +99,13 @@ definitions:
       user_id:
         type: integer
     type: object
+  models.OrderRequest:
+    properties:
+      product_id:
+        type: integer
+      quantity:
+        type: integer
+    type: object
   models.Product:
     properties:
       brand:
@@ -705,7 +712,7 @@ paths:
         name: order
         required: true
         schema:
-          $ref: '#/definitions/models.Order'
+          $ref: '#/definitions/models.OrderRequest'
       produces:
       - application/json
       responses:

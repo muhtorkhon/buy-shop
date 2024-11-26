@@ -709,7 +709,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Order"
+                            "$ref": "#/definitions/models.OrderRequest"
                         }
                     }
                 ],
@@ -1199,6 +1199,17 @@ const docTemplate = `{
                     "$ref": "#/definitions/models.Users"
                 },
                 "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.OrderRequest": {
+            "type": "object",
+            "properties": {
+                "product_id": {
+                    "type": "integer"
+                },
+                "quantity": {
                     "type": "integer"
                 }
             }

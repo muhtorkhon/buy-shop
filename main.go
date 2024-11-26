@@ -79,11 +79,17 @@ func main() {
 		Storage: brandSt,
 	}
 
+	orderSt := storage.NewOrderStorage(conn)
+	orController := controllers.OrderController{
+		Storage: orderSt,
+	}
+
 	router := routes.SetupRouter(&controllers.Controller{
 		Brand: &brController,
 		Category: &catController,
 		Product: &prController,
 		Auth: &authController,
+		Order: &orController,
 	})
 
 	router.GET("/buy-shop/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

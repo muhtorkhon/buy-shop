@@ -13,3 +13,8 @@ type Order struct {
 	Product     *Product  `json:"product" gorm:"foreignKey:ProductID"`
 	CreatedAt   time.Time `json:"created_at" gorm:"autoCreateTime"`
 }
+
+type OrderRequest struct {
+	ProductID int `json:"product_id"`
+	Quantity  int `json:"quantity"`
+}

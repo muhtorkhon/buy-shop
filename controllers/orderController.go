@@ -27,7 +27,7 @@ func NewOrderController(storage *storage.OrderStore) *OrderController {
 // @Tags         orders
 // @Accept       json
 // @Produce      json
-// @Param        order body models.Order true "Order data"
+// @Param        order body models.OrderRequest true "Order data"
 // @Success      201 {object} models.Order "Successfully created the order"
 // @Failure      400 {object} map[string]interface{} "Invalid input or product not available"
 // @Failure      401 {object} map[string]interface{} "Unauthorized"
@@ -35,6 +35,7 @@ func NewOrderController(storage *storage.OrderStore) *OrderController {
 // @Router       /orders [post]
 func (o *OrderController) CreateOrder(c *gin.Context) {
 	var order models.Order
+	var body models.OrderRequest
 
 	email, exists := c.Get("email")
 	if !exists {
@@ -50,7 +51,7 @@ func (o *OrderController) CreateOrder(c *gin.Context) {
 		return
 	}
 	
-	if err := c.ShouldBindJSON(&order); err != nil {
+	if err := c.ShouldBindJSON(&body); err != nil {
 		HandleResponse(c, http.StatusBadRequest, "Invalid input data")
 		log.Warnf("Error: Invalid order data received: %v", err)
 		return
@@ -58,16 +59,16 @@ func (o *OrderController) CreateOrder(c *gin.Context) {
 
 	order.UserID = userID
 
-	if !o.Storage.CheckProductAvailability(order.ProductID, order.Quantity) {
+	if !o.Storage.CheckProductAvailability(body.ProductID, body.Quantity) {
 		HandleResponse(c, http.StatusBadRequest, "Product not available")
-		log.Warnf("Error: Product ID %d is not available in sufficient quantity", order.ProductID)
+		log.Warnf("Error: Product ID %d is not available in sufficient quantity", body.ProductID)
 		return
 	}
 
-	summa, err := o.Storage.CalculateTotalAmount(order.ProductID, order.Quantity)
+	summa, err := o.Storage.CalculateTotalAmount(body.ProductID, body.Quantity)
 	if err != nil {
 		HandleResponse(c, http.StatusBadRequest, "Failed to calculate total amount")
-    	log.Errorf("Error calculating total amount for Product ID %d: %v", order.ProductID, err)
+    	log.Errorf("Error calculating total amount for Product ID %d: %v", body.ProductID, err)
     	return
 	}
 

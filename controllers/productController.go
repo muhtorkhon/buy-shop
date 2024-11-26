@@ -66,6 +66,7 @@ func (s *ProductController) GetProductsByFilters(c *gin.Context) {
 // @Summary      Get product by ID
 // @Description  Retrieves a product by its unique ID.
 // @Tags         products
+// @securityKey  bir 
 // @Accept       json
 // @Produce      json
 // @Param        id   path  int  true  "Product ID"
@@ -131,7 +132,7 @@ func (s *ProductController) CreateProduct(c *gin.Context) {
 // @Summary 		Update a product by ID
 // @Description 	Update an existing product by its ID
 // @Tags 			products
-// @Security 	 BearerAuth
+// @Security 	    BearerAuth
 // @Accept 			json
 // @Produce 		json
 // @Param 			id path int true "Product ID"
@@ -163,7 +164,7 @@ func (s *ProductController) UpdateProduct(c *gin.Context) {
 // @Summary 		Delete a product by ID
 // @Description 	Delete a specific product by its ID
 // @Tags 			products
-// @Security 	 BearerAuth
+// @Security 	    BearerAuth
 // @Accept 			json
 // @Produce 		json
 // @Param   		id path int true "Product ID"
